@@ -1,0 +1,16 @@
+---
+- name: Change Cisco IOS XE Switch Hostname
+  hosts: switches
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Change hostname to {{ new_hostname }}
+      ios_config:
+        commands:
+          - hostname {{ new_hostname }}
+      register: config_output
+
+    - name: Display configuration output
+      debug:
+        var: config_output
