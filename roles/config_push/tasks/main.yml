@@ -2,8 +2,8 @@
 - name: Ensure hostname data is available before config push
   assert:
     that:
-      - desired_hostname is defined
-      - desired_hostname | length > 0
+      - intended_hostname is defined
+      - intended_hostname | length > 0
     fail_msg: "No hostname data is available. Run the netbox_data role before config_push."
 
 - name: Render hostname configuration

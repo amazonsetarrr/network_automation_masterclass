@@ -29,4 +29,4 @@
 
 - name: Store device data retrieved from NetBox
   set_fact:
-    desired_hostname: "{{ netbox_device_response.json.results[0][netbox_hostname_field] }}"
+    intended_hostname: "{{ netbox_device_response.json.results[0][netbox_hostname_field] }}"

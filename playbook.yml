@@ -1,6 +1,6 @@
 ---
 - name: Configure Cisco IOS XE hostname from NetBox
-  hosts: switches
+  hosts: all
   gather_facts: false
   connection: network_cli
 
