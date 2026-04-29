@@ -1,0 +1,3 @@
+netbox_url: "http://netbox.example.com"
+netbox_token: "replace-with-your-netbox-token"
+netbox_validate_certs: false

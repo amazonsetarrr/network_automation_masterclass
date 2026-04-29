@@ -1,0 +1,4 @@
+---
+netbox_validate_certs: false
+netbox_device_lookup_field: name
+netbox_hostname_field: name

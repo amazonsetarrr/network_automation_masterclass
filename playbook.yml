@@ -1,16 +1,9 @@
 ---
-- name: Change Cisco IOS XE Switch Hostname
+- name: Configure Cisco IOS XE hostname from NetBox
   hosts: switches
-  gather_facts: no
+  gather_facts: false
   connection: network_cli
 
-  tasks:
-    - name: Change hostname to {{ new_hostname }}
-      ios_config:
-        commands:
-          - hostname {{ new_hostname }}
-      register: config_output
-
-    - name: Display configuration output
-      debug:
-        var: config_output
+  roles:
+    - role: netbox_data
+    - role: config_push

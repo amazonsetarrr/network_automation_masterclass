@@ -1,0 +1,26 @@
+---
+- name: Ensure hostname data is available before config push
+  assert:
+    that:
+      - desired_hostname is defined
+      - desired_hostname | length > 0
+    fail_msg: "No hostname data is available. Run the netbox_data role before config_push."
+
+- name: Render hostname configuration
+  set_fact:
+    rendered_hostname_config: "{{ lookup('template', 'hostname_config.j2') | trim }}"
+
+- name: Show rendered hostname configuration
+  debug:
+    msg:
+      - "NetBox device: {{ netbox_query_name | default(inventory_hostname) }}"
+      - "Rendered config: {{ rendered_hostname_config }}"
+
+- name: Push hostname configuration to device
+  ios_config:
+    lines: "{{ rendered_hostname_config.splitlines() }}"
+  register: config_output
+
+- name: Display configuration output
+  debug:
+    var: config_output

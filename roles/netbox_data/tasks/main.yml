@@ -1,0 +1,32 @@
+---
+- name: Build NetBox lookup values
+  set_fact:
+    netbox_query_name: "{{ netbox_device_name | default(inventory_hostname) }}"
+    netbox_device_api_url: >-
+      {{ netbox_url }}/api/dcim/devices/?{{ netbox_device_lookup_field }}={{ (netbox_device_name | default(inventory_hostname)) | urlencode }}
+
+- name: Retrieve device information from NetBox
+  delegate_to: localhost
+  uri:
+    url: "{{ netbox_device_api_url }}"
+    method: GET
+    headers:
+      Authorization: "Token {{ netbox_token }}"
+      Accept: "application/json"
+    validate_certs: "{{ netbox_validate_certs | bool }}"
+    return_content: true
+  changed_when: false
+  no_log: true
+  register: netbox_device_response
+
+- name: Ensure NetBox returned a single device
+  assert:
+    that:
+      - netbox_device_response.json.count | int == 1
+    fail_msg: >-
+      Expected one NetBox device for '{{ netbox_query_name }}' but received
+      {{ netbox_device_response.json.count | default(0) }}.
+
+- name: Store device data retrieved from NetBox
+  set_fact:
+    desired_hostname: "{{ netbox_device_response.json.results[0][netbox_hostname_field] }}"
